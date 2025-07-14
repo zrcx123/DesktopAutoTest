@@ -22,8 +22,6 @@ pytest --html=report.html  # 需先安装 pytest-html
 
 # 生成带时间戳的测试报告
 pytest --html=reports/report_$(Get-Date -Format "yyyy-MM-dd_HH-mm-ss").html
-```
-
 
 框架目录结构
 oceanbase_test/
@@ -44,4 +42,8 @@ oceanbase_test/
     └── helpers.py              # 辅助函数
 └── reports/                    # 工具函数
     ├── assets                  # css函数目录
-    └── report_2025-07-08_11-13-52.html 					
+    └── report_2025-07-08_11-13-52.html
+
+```
+
+
