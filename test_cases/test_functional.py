@@ -32,10 +32,17 @@ class TestOperations:
     @pytest.mark.run(order=6)
     def test_check_help_installation_Manual(self, main_page):
         """测试 帮助-安装手册 超链接"""
+        time.sleep(1)
         assert main_page.start_application(), "应用启动失败"
+        time.sleep(1)
         assert main_page.verify_help_installation_manual(), "帮助-安装手册 超链接验证失败"
 
     @pytest.mark.run(order=7)
+    def test_application_close(self, main_page):
+        """测试应用关闭"""
+        assert main_page.close_application(), "应用关闭失败"
+
+    @pytest.mark.run(order=8)
     def test_check_help_statement(self, main_page):
         """测试 帮助-声明 """
         assert main_page.start_application(), "应用启动失败"
