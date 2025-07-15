@@ -35,7 +35,15 @@ class InstallationPage:
                         control_type="Button"
                     )
                     if finish_button.exists() and finish_button.is_enabled():
-                        #install_dlg["完成(F)"].click()
+                        run_checkbox = install_dlg.child_window(
+                            title="运行 OceanBase-Desktop(R)",
+                            control_type="CheckBox"
+                        )
+                        if run_checkbox.exists():
+                            if run_checkbox.get_toggle_state():  # 如果已勾选，则取消勾选
+                                run_checkbox.click()
+                                print("已取消勾选 '运行 OceanBase-Desktop(R)'")
+                        install_dlg["完成(F)"].click()
                         print("安装成功完成！")
                         return True
                 except ElementNotFoundError:
@@ -45,3 +53,4 @@ class InstallationPage:
             return False
         except Exception as e:
             raise Exception(f"自动化安装失败: {str(e)}")
+

@@ -4,6 +4,7 @@ def pytest_addoption(parser):
     parser.addoption("--app-path", action="store", default=r"C:\Program Files\OceanBase-Desktop\OceanBase-Desktop.exe")
     parser.addoption("--window-title", action="store", default="OceanBase-Desktop")
     parser.addoption("--uninstall-path", action="store", default=r"C:\Program Files\OceanBase-Desktop\Uninstall OceanBase-Desktop.exe")
+    parser.addoption("--OceanBase-hyperlink", action="store", default="https://www.oceanbase.com/")
 
 def setup_logging():
     """设置日志配置"""

@@ -55,7 +55,7 @@ class UnInstallationPage:
                 title="解除安装(U)",
                 control_type="Button"
             )
-            install_button.wait('enabled', timeout=5)
+            install_button.wait('enabled', timeout=1)
             install_button.click_input()
 
             # 尝试查找"确定"按钮，如果存在则点击
@@ -64,7 +64,7 @@ class UnInstallationPage:
                     title="确定",
                     control_type="Button"
                 )
-                ok_button.wait('enabled', timeout=5)  # Shorter timeout for this optional button
+                ok_button.wait('enabled', timeout=1)  # Shorter timeout for this optional button
                 if ok_button.exists() and ok_button.is_enabled():
                     print("找到确定按钮，正在点击...")
                     ok_button.click_input()
