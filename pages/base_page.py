@@ -21,7 +21,7 @@ class BasePage:
                 # 将窗口提到前台
                 self.main_window.set_focus()
                 # 确保窗口处于可点击状态
-                self.main_window.wait('ready', timeout=5)
+                self.main_window.wait('ready', timeout=10)
                 return True
             except Exception as e:
                 raise Exception(f"窗口前置操作失败: {e}")

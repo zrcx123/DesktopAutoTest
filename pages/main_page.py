@@ -75,12 +75,12 @@ class MainPage(BasePage):
             timeout=30
         )
         print("点击 安装手册")
-        return self.click_button("安装手册", "Hyperlink", 300)
+        return self.click_button("安装手册", "Hyperlink", 30)
 
     def verify_help_statement(self):
         """执行启动序列"""
         print("点击 帮助")
-        self.click_button("bulb 帮助","Hyperlink", 300)
+        self.click_button("bulb 帮助","Hyperlink", 30)
         print("点击 声明")
-        self.click_button("声明", "Hyperlink", 300)
+        self.click_button("声明", "Hyperlink", 30)
         return self.verify_statement_txt()
