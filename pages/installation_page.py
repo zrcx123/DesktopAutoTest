@@ -18,7 +18,7 @@ class InstallationPage:
             install_app = Application(backend="uia").start(self.setup_path)
             print("所有顶层窗口:", install_app.windows())
             install_dlg = install_app.window(title_re="OceanBase-Desktop 安装 ")
-            install_dlg.wait('ready', timeout=30)
+            install_dlg.wait('ready', timeout=60)
             print("启动OceanBase-Desktop 安装应用程序")
 
             install_button = install_dlg.child_window(

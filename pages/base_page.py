@@ -14,23 +14,26 @@ class BasePage:
         self.main_window = None
         self._is_app_running = False
 
-    def start_application(self):
-        """启动应用程序"""
+    def start_application(self, maximize_window=False):
+        """启动应用程序
+        Args:
+            maximize_window: bool，是否最大化窗口，默认为False
+        """
         if self._is_app_running:
-            try:
-                # 将窗口提到前台
-                self.main_window.set_focus()
-                # 确保窗口处于可点击状态
-                self.main_window.wait('ready', timeout=20)
-                return True
-            except Exception as e:
-                raise Exception(f"窗口前置操作失败: {e}")
-
+            # 前置窗口操作
+            self.main_window.set_focus()
+            self.main_window.wait('ready', timeout=20)
+            if maximize_window:
+                self._maximize_window()
+            return True
+        # 启动新实例流程
         try:
             self.app = Application(backend="uia").start(self.app_path)
             self.main_window = self.app.window(title=self.window_title)
             self.main_window.wait("visible", timeout=10)
             self._is_app_running = True
+            if maximize_window:
+                self._maximize_window()
             return True
         except Exception as e:
             raise Exception(f"启动应用失败: {e}")
@@ -158,50 +161,82 @@ class BasePage:
                                 show_only_types=None,
                                 show_properties=['control_type', 'name', 'automation_id', 'is_enabled']):
         """
-        递归打印窗口下所有组件的结构化信息
+        递归打印窗口下所有组件的结构化信息(改进版)
+
         参数:
-            indent: 缩进级别
+            indent: 当前缩进级别
             max_depth: 最大递归深度
-            show_only_types: 只显示指定类型的控件
+            show_only_types: 只显示指定类型的控件(列表)
             show_properties: 需要显示的属性列表
         """
         if max_depth < 0 or not hasattr(self, 'main_window') or not self.main_window:
             return
 
-        prefix = "  " * indent
-        element = getattr(self.main_window, 'element_info', self.main_window)
-
         try:
-            # 基础信息检查
-            control_type = getattr(element, 'control_type', None)
-            if not control_type or (show_only_types and control_type not in show_only_types):
+            # 获取当前控件的统一接口
+            control = self.main_window
+            element = getattr(control, 'element_info', control)
+
+            # 获取控件类型
+            control_type = getattr(element, 'control_type', 'Unknown')
+
+            # 类型过滤
+            if show_only_types and control_type not in show_only_types:
                 return
 
-            # 收集和打印属性信息
+            # 构建属性信息
             info = {
                 'control_type': f"类型: {control_type}",
-                'name': f"名称: {getattr(element, 'name', '')}",
-                'automation_id': f"ID: {getattr(element, 'automation_id', '')}",
-                'is_enabled': f"启用: {'是' if self.main_window.is_enabled() else '否'}",
-                'is_visible': f"可见: {'是' if self.main_window.is_visible() else '否'}"
+                'name': f"名称: {getattr(element, 'name', 'N/A')}",
+                'automation_id': f"ID: {getattr(element, 'automation_id', 'N/A')}",
+                'is_enabled': f"启用: {'是' if control.is_enabled() else '否'}",
+                'is_visible': f"可见: {'是' if control.is_visible() else '否'}",
+                'rect': f"位置: {getattr(control, 'rectangle', 'N/A')}"
             }
-            print(prefix + "└── " + " | ".join(info[prop] for prop in show_properties if prop in info))
 
-            # 特殊控件处理
-            if hasattr(self.main_window, 'window_text'):
-                text = self.main_window.window_text()
-                if isinstance(self.main_window, ButtonWrapper):
-                    print(prefix + f"    文本: {text}")
-                elif isinstance(self.main_window, EditWrapper):
-                    print(prefix + f"    内容: {text}")
+            # 打印当前控件信息
+            prefix = "    " * indent
+            print(prefix + "└── " + " | ".join(
+                info[prop] for prop in show_properties if prop in info
+            ))
+
+            # 特殊属性处理
+            if hasattr(control, 'window_text'):
+                text = control.window_text()
+                if text and text.strip():
+                    print(prefix + f"    文本: {text[:50]}{'...' if len(text) > 50 else ''}")
 
             # 递归处理子控件
-            if indent < max_depth and hasattr(self.main_window, 'children'):
-                for child in self.main_window.children():
+            if indent < max_depth:
+                # 更全面的子控件获取方式
+                children = []
+                if hasattr(control, 'children'):  # 标准children接口
+                    children = control.children()
+                elif hasattr(control, 'descendants'):  # 某些后端的descendants接口
+                    children = control.descendants(depth=1)
+
+                for child in children:
                     if child:
                         temp_obj = self.__class__()
                         temp_obj.main_window = child
-                        temp_obj.print_all_controls_info(indent + 1, max_depth, show_only_types, show_properties)
+                        temp_obj.print_all_controls_info(
+                            indent + 1,
+                            max_depth,
+                            show_only_types,
+                            show_properties
+                        )
 
         except Exception as e:
-            print(prefix + f" 发生错误: {str(e)}")
+            print(f"{'    ' * indent}[ERROR] {str(e)}")
+
+    def _maximize_window(self):
+        """最大化窗口的辅助方法"""
+        if not self.main_window.is_maximized():
+            print("正在最大化窗口...")
+            self.main_window.maximize()
+            # 等待窗口完成最大化
+            self.main_window.wait('ready', timeout=5)
+
+    def verify_go_control_page_contains(self):
+        assert self.print_all_controls_info(max_depth=15)
+        return True

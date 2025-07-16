@@ -5,21 +5,30 @@ from .base_page import BasePage
 
 
 class MainPage(BasePage):
-    def perform_startup_sequence(self):
+    def perform_startup_cluster(self):
         """执行启动序列"""
         print("启动OceanBase-Desktop")
-        self.click_button("启 动", "Button",30)
+        try:
+            self.click_button("启 动", "Button", 30)
+        except Exception:
+            try:
+                self.click_button("停 止", "Button", 30)
+                self.click_button("确 定", "Button", 30)
+                self.click_button("启 动", "Button", 30)
+            except Exception:
+                raise Exception("未找到启动或停止按钮")
+        time.sleep(1)
         print("启动成功OceanBase-Desktop")
-        return self.click_button("确 定", "Button",30)
+        return self.click_button("确 定", "Button", 30)  # 返回 True
 
-    def perform_stop_sequence(self):
+    def perform_stop_cluster(self):
         """执行停止序列"""
         print("启动OceanBase-Desktop")
         self.click_button("停 止", "Button",30)
         print("启动成功OceanBase-Desktop")
         return self.click_button("确 定", "Button",30)
 
-    def verify_running_status(self,):
+    def verify_running_status(self):
         """验证运行状态"""
         expected_status = "状态： 运行中  版本号：4.3.5.1 架构：x86_64"
         return self.verify_text_contains(
@@ -37,7 +46,7 @@ class MainPage(BasePage):
             timeout=30
         )
 
-    def verify_statement_txt(self,):
+    def verify_statement_txt(self):
         """验证声明的文字"""
         expected_status = "产品概述 OceanBase 桌面版是由 OceanBase 团队开发的轻量级分布式数据库软件"
         return self.verify_text_contains(
@@ -46,7 +55,7 @@ class MainPage(BasePage):
             timeout=30
         )
 
-    def verify_EN_txt(self,):
+    def verify_EN_txt(self):
         """验证切换为英文状态"""
         expected_status = "Home OB Dashboard OB Website Help English    Status: "
         return self.verify_text_contains(
@@ -64,13 +73,22 @@ class MainPage(BasePage):
             timeout=30
         )
 
+    def verify_Control_page_txt(self,):
+        """验证切换为中文状态"""
+        expected_status = "参数管理"
+        return self.verify_text_contains(
+            expected_status,
+            r".*参数管理.*",
+            timeout=15
+        )
+
     def connect_to_database(self):
         """连接数据库"""
         print("连接数据库操作...")
         return self.click_button(
             "连 接",
             "Button",
-            30
+            15
         )
 
     def verify_ob_webView_status(self):
@@ -78,23 +96,25 @@ class MainPage(BasePage):
         self.verify_ob_webView_contains(
             expected_url="https://www.oceanbase.com/",
             expected_title="OceanBase官网",
-            timeout=30
+            timeout=15
         )
-        return self.click_button("OceanBase官网", "Hyperlink", 300)
+        return self.click_button("OceanBase官网", "Hyperlink", 30)
 
     def verify_help_installation_manual(self):
+        """验证 帮助-安装 按钮"""
         print("点击 帮助")
-        self.click_button("bulb 帮助","Hyperlink", 300)
+        self.click_button("bulb 帮助","Hyperlink", 30)
         #assert self.print_all_controls_info()
         self.verify_ob_webView_contains(
             expected_url="https://www.oceanbase.com/docs/common-oceanbase-database-cn-1000000002866370",
             expected_title="安装手册",
-            timeout=30
+            timeout=15
         )
         print("点击 安装手册")
         return self.click_button("安装手册", "Hyperlink", 30)
 
     def verify_help_statement(self):
+        """验证 帮助-声明 按钮"""
         print("点击 帮助")
         self.click_button("bulb 帮助","Hyperlink", 30)
         print("点击 声明")
@@ -139,3 +159,9 @@ class MainPage(BasePage):
             return self.verify_EN_txt()
         else:
             raise ValueError(f"不支持的语言选项: {language}")
+
+    def perform_go_control_page(self):
+        """验证 进入管控页面  """
+        self.click_button("进入管控页面", "Hyperlink", 30)
+        assert self.click_button("参数管理", "Button", 30)
+        return self.verify_Control_page_txt()

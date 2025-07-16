@@ -11,17 +11,17 @@ class TestOperations:
         assert main_page.verify_switch_language("中文"), "测试  切换中文  验证失败"
 
     @pytest.mark.run(order=2)
-    def test_startup_sequence(self, main_page):
+    def test_startup_cluster(self, main_page):
         """测试启动"""
         assert main_page.start_application(), "应用启动失败"
-        assert main_page.perform_startup_sequence(), "集群启动执行失败"
+        assert main_page.perform_startup_cluster(), "集群启动执行失败"
         assert main_page.verify_running_status(), "状态验证失败"
 
     @pytest.mark.run(order=3)
-    def test_stop_sequence(self, main_page):
+    def test_stop_cluster(self, main_page):
         """测试停止"""
         assert main_page.start_application(), "应用启动失败"
-        assert main_page.perform_stop_sequence(), "集群停止执行失败"
+        assert main_page.perform_stop_cluster(), "集群停止执行失败"
         assert main_page.verify_stopping_status(), "状态验证失败"
 
     @pytest.mark.run(order=4)
