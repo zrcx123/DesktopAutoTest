@@ -31,7 +31,7 @@ def installation_page(setup_path):
 def uninstallation_page(uninstall_path):
     return UnInstallationPage(uninstall_path)
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def main_page(app_path, window_title):
     page = MainPage(app_path, window_title)
     yield page

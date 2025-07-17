@@ -3,8 +3,7 @@ import pytest
 
 @pytest.mark.database
 class TestDatabase:
-    @pytest.mark.run(order=11)
-
+    @pytest.mark.run(order=12)
     def test_database_connection(self, main_page):
         """测试数据库连接"""
         assert main_page.start_application(), "应用启动失败"

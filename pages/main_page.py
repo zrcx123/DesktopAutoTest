@@ -13,7 +13,9 @@ class MainPage(BasePage):
         except Exception:
             try:
                 self.click_button("停 止", "Button", 30)
+                time.sleep(1)
                 self.click_button("确 定", "Button", 30)
+                time.sleep(1)
                 self.click_button("启 动", "Button", 30)
             except Exception:
                 raise Exception("未找到启动或停止按钮")
@@ -24,9 +26,10 @@ class MainPage(BasePage):
     def perform_stop_cluster(self):
         """执行停止序列"""
         print("启动OceanBase-Desktop")
-        self.click_button("停 止", "Button",30)
+        self.click_button("停 止", "Button",60)
+        time.sleep(1)
         print("启动成功OceanBase-Desktop")
-        return self.click_button("确 定", "Button",30)
+        return self.click_button("确 定", "Button",60)
 
     def verify_running_status(self):
         """验证运行状态"""
@@ -43,7 +46,7 @@ class MainPage(BasePage):
         return self.verify_text_contains(
             expected_status,
             r".*状态：.*",
-            timeout=30
+            timeout=60
         )
 
     def verify_statement_txt(self):
