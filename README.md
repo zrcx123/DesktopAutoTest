@@ -1,4 +1,8 @@
 ```bash
+安装依赖
+ pip install pytest-ordering
+ pip install pytest-html
+
 # 运行所有测试
 pytest
 
