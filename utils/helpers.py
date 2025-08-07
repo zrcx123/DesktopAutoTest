@@ -1,6 +1,6 @@
 def pytest_addoption(parser):
     """添加自定义命令行选项"""
-    parser.addoption("--setup-path", action="store", default=r"C:\lvwei\OceanBase-Desktop-Setup-1.0.0.exe")
+    parser.addoption("--setup-path", action="store", default=r"C:\lvwei\OceanBase-Desktop-Setup-1.1.0.exe")
     parser.addoption("--app-path", action="store", default=r"C:\Program Files\OceanBase-Desktop\OceanBase-Desktop.exe")
     parser.addoption("--window-title", action="store", default="OceanBase-Desktop")
     parser.addoption("--uninstall-path", action="store", default=r"C:\Program Files\OceanBase-Desktop\Uninstall OceanBase-Desktop.exe")

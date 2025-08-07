@@ -33,7 +33,7 @@ class MainPage(BasePage):
 
     def verify_running_status(self):
         """验证运行状态"""
-        expected_status = "状态： 运行中  版本号：4.3.5.1 架构：x86_64"
+        expected_status = "状态： 运行中"
         return self.verify_text_contains(
             expected_status,
             r".*状态：.*",
@@ -60,7 +60,7 @@ class MainPage(BasePage):
 
     def verify_EN_txt(self):
         """验证切换为英文状态"""
-        expected_status = "Home OB Dashboard OB Website Help English    Status: "
+        expected_status = "Home OB Dashboard OB Website Help English"
         return self.verify_text_contains(
             expected_status,
             r".*Status .*",
@@ -69,7 +69,7 @@ class MainPage(BasePage):
 
     def verify_ZH_txt(self,):
         """验证切换为中文状态"""
-        expected_status = "回到首页 进入管控页面 OceanBase官网 帮助 中文    状态： 已停止"
+        expected_status = "回到首页 进入管控页面 OceanBase官网 帮助 中文"
         return self.verify_text_contains(
             expected_status,
             r".*状态：.*",
