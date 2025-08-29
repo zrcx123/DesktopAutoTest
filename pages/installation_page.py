@@ -26,6 +26,7 @@ class InstallationPage:
                 control_type="Button"
             )
             install_button.click_input()
+            time.sleep(1)
 
             install_dlg = install_app.window(title_re="OceanBase-Desktop 安装 ")
             install_dlg.wait('ready', timeout=60)

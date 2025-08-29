@@ -103,6 +103,7 @@ class BasePage:
 
                 full_text = doc.window_text()
                 print(f"获取到的完整文本:\n{full_text}")
+                self.print_all_controls_info()
 
                 if expected_text in full_text:
                     print("验证通过: OceanBase集群正在运行")

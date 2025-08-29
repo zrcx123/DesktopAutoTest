@@ -1,4 +1,4 @@
-pytest==8.4.1
-pywinauto==0.6.9
+pytest
+pywinauto
 pytest-ordering
 pytest-html

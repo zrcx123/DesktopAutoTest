@@ -4,9 +4,10 @@ import pytest
 @pytest.mark.operations
 class TestOperations:
     @pytest.mark.run(order=1)
-    def test_switch_zh(self, main_page):
+    def test_switch_zh1(self, main_page):
         """测试 切换中文"""
         assert main_page.start_application(), "应用启动失败"
+        time.sleep(60)
         assert main_page.verify_switch_language("中文"), "测试  切换中文  验证失败"
 
     @pytest.mark.run(order=2)
@@ -20,6 +21,7 @@ class TestOperations:
     def test_stop_cluster(self, main_page):
         """测试停止"""
         assert main_page.start_application(), "应用启动失败"
+        assert main_page.verify_running_status(), "状态验证失败"
         assert main_page.perform_stop_cluster(), "集群停止执行失败"
         assert main_page.verify_stopping_status(), "状态验证失败"
 
@@ -45,9 +47,9 @@ class TestOperations:
     @pytest.mark.run(order=7)
     def test_check_help_statement(self, main_page):
         """测试 帮助-声明 """
-        assert main_page.close_application(), "应用关闭失败"
+        assert main_page.start_application(), "应用关闭失败"
         time.sleep(1)
-        assert main_page.start_application(), "应用启动失败"
+        assert main_page.verify_running_status(), "状态验证失败"
         assert main_page.verify_help_statement(), "帮助-声明  验证失败"
 
     @pytest.mark.run(order=8)
@@ -58,16 +60,17 @@ class TestOperations:
     @pytest.mark.run(order=9)
     def test_switch_en(self, main_page):
         """测试 切换英文"""
-        assert main_page.close_application(), "应用关闭失败"
+        assert main_page.start_application(), "应用关闭失败"
         time.sleep(1)
-        assert main_page.start_application(), "应用启动失败"
+        assert main_page.verify_running_status(), "状态验证失败"
+        time.sleep(1)
         assert main_page.verify_switch_language("English"), "测试 切换英文  验证失败"
 
     @pytest.mark.run(order=10)
-    def test_switch_zh(self, main_page):
+    def test_switch_zh2(self, main_page):
         """测试 切换中文"""
-        time.sleep(1)
         assert main_page.start_application(), "应用启动失败"
+        assert main_page.verify_running_en_status(), "验证 Status：Running"
         assert main_page.verify_switch_language("中文"), "测试  切换中文  验证失败"
 
     @pytest.mark.run(order=11)

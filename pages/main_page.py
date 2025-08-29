@@ -40,6 +40,15 @@ class MainPage(BasePage):
             timeout=60
         )
 
+    def verify_running_en_status(self):
+        """验证运行状态"""
+        expected_status = "Status: Running"
+        return self.verify_text_contains(
+            expected_status,
+            r".*Status.*",
+            timeout=60
+        )
+
     def verify_stopping_status(self):
         """验证停止状态"""
         expected_status = "状态： 已停止"
